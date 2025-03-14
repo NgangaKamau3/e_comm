@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}{{ category|title }} - GrabIt{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-capitalize mb-4">{{ category }}</h1>
+    
+    <div class="row mb-4">
+        <!-- Filters Column -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Filters</h5>
+                    <form method="GET" id="filterForm">
+                        <!-- Sub-categories -->
+                        <div class="mb-3">
+                            <label class="form-label">Sub-category</label>
+                            <select name="sub_category" class="form-select">
+                                <option value="">All</option>
+                                {% for sub in sub_categories %}
+                                <option value="{{ sub }}" {% if selected_sub_category == sub %}selected{% endif %}>
+                                    {{ sub|title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Brands -->
+                        <div class="mb-3">
+                            <label class="form-label">Brand</label>
+                            <select name="brand" class="form-select">
+                                <option value="">All</option>
+                                {% for brand in brands %}
+                                <option value="{{ brand }}" {% if selected_brand = brand %}selected{% endif %}>
+                                    {{ brand }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="mb-3">
+                            <label class="form-label">Sort by</label>
+                            <select name="sort" class="form-select">
+                                <option value="newest" {% if selected_sort = 'newest' %}selected{% endif %}>Newest</option>
+                                <option value="price_low" {% if selected_sort = 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_high" {% if selected_sort =  'price_high' %}selected{% endif %}>Price: High to Low</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="col-md-9">
+            {% if products %}
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="product-image-container">
+                            <img src="{{ url_for('static', filename='images/' + product.product_image_name) }}" 
+                                 class="card-img-top product-image"
+                                 onerror="this.src='{{ url_for('static', filename='images/placeholder.png') }}'"
+                                 alt="{{ product.product_name }}">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.product_name }}</h5>
+                            <p class="card-text text-truncate">{{ product.product_desc }}</p>
+                            <p class="card-text">
+                                <strong>${{ "%.2f"|format(product.product_cost) }}</strong>
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" 
+                                   class="btn btn-primary">View Details</a>
+                                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" 
+                                      method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No products found matching your criteria.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filterForm');
+    const selects = form.querySelectorAll('select');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle form submissions
+    const form = document.getElementById('filterForm');
+    const selects = form.querySelectorAll('select');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            form.submit();
+        });
+    });
+
+    // Handle image errors
+    const productImages = document.querySelectorAll('.product-image');
+    productImages.forEach(img => {
+        img.addEventListener('error', function() {
+            const placeholder = this.getAttribute('data-placeholder');
+            if (this.src !== placeholder) {
+                this.src = placeholder;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

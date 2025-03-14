@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('homepage') }}">GrabIt</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('homepage') }}">Home</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('view_cart') }}">
+                        Cart <span class="badge bg-primary">{{ session.get('cart', [])|length }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="categoryNav">
+            <ul class="navbar-nav">
+                {% for category in ['shoes', 'clothes', 'electronics', 'accessories'] %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        {{ category|title }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ url_for('category_view', category=category) }}">All {{ category|title }}</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if category == 'shoes' %}
+                            <li><a class="dropdown-item" href="{{ url_for('category_view', category=category, sub_category='basketball') }}">Basketball</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('category_view', category=category, sub_category='running') }}">Running</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('category_view', category=category, sub_category='casual') }}">Casual</a></li>
+                        {% endif %}
+                        <!-- Add similar blocks for other categories -->
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>

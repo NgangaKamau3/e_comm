@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Shopping Cart</h1>
+    {% if cart %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                    <tr>
+                        <td>
+                            <img src="{{ url_for('static', filename='images/' + item.image) }}" 
+                                 style="width: 50px" alt="{{ item.name }}">
+                        </td>
+                        <td>{{ item.name }}</td>
+                        <td>
+                            <input type="number" min="1" max="10" value="{{ item.quantity }}"
+                                   class="form-control quantity-input" style="width: 80px"
+                                   data-item-id="{{ item.id }}">
+                        </td>
+                        <td>${{ "%.2f"|format(item.price) }}</td>
+                        <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm remove-item"
+                                    data-item-id="{{ item.id }}">Remove</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                        <td colspan="2"><strong>${{ "%.2f"|format(total) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('homepage') }}" class="btn btn-secondary">Continue Shopping</a>
+                <a href="{{ url_for('checkout') }}" class="btn btn-success">Proceed to Checkout</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Your cart is empty. <a href="{{ url_for('homepage') }}">Continue shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

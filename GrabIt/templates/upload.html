@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Upload</title>
+	<link rel="stylesheet" href="../static/css/bootstrap.css">
+</head>
+<body>
+	<div class="container">
+		<!-- Split the screen in two -->
+		 <div class="col-md-6">
+			<!-- Add a card with a shadow -->
+			 <div class="card shadow p-2">
+				<b class="text-success">{{ message }}</b>
+				<h6 class="text-danger">{{ Error }}</h6>
+				<!-- We want to have a form -->
+				 <form action="/upload" method="post" enctype="multipart/form-data">
+					<h2>Upload your Products</h2>
+					<div>
+						<label for="InputText01">Product Name</label>
+						<input type="text" rows="15" cols="20" class="form-control" name="product_name" required>
+					</div>
+					<br>
+					<div>
+						<label for="InputText02">Product Description</label>
+						<input type="text" class="form-control" name="product_desc" required>
+					</div>
+					<br>
+					<div class="input-group mb-3">
+						<label for="">Product Cost</label>
+						<span class="input-group-text">$</span>
+						<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="product_cost">
+						<span class="input-group-text">.00</span>
+					  </div> 
+					  <br>
+					  <div class="input-group mb-3">
+						<button class="btn btn-outline-secondary" type="button">Product Category</button>
+						<select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon" name="product_category">
+						  <option selected></option>Choose...
+						  <option value="phones">Phones</option>
+						  <option value="fashion">Fashion</option>
+						  <option value="appliances">Appliances</option>
+						</select>
+					  </div>
+					  <div class="input-group mb-3">
+						<input type="file" class="form-control" id="inputGroupFile02" name="product_image_name">
+						<label class="input-group-text" for="inputGroupFile02">Upload</label>
+					  </div>
+					  <div class="input-group mb-3">
+						<button class="btn btn-outline-secondary bg-warning" type="submit">Upload/Add Products</button>
+					  </div>
+				 </form>
+			 </div>
+		 </div>
+	</div>
+</body>
+</html>

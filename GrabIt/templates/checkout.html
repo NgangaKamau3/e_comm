@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Checkout (Demo)</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Order Summary</h5>
+                    <table class="table">
+                        {% for item in cart %}
+                        <tr>
+                            <td>{{ item.name }} x {{ item.quantity }}</td>
+                            <td class="text-end">${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="text-end"><strong>${{ "%.2f"|format(total) }}</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <form method="POST" class="needs-validation" novalidate>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Shipping Information</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Place Order (Demo)</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
